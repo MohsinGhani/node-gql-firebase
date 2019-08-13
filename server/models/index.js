@@ -16,4 +16,4 @@ const UserRole = `
  }
 `
 
-module.exports = {User, UserRole}
+module.exports = { User, UserRole }
