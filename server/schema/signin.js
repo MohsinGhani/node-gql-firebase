@@ -9,7 +9,7 @@ const signinSchema = gql`
     signin(
         email:String!
         password:String!
-      ): User!
+      ): signInConnection!
     }
 `;
 

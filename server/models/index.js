@@ -16,4 +16,11 @@ const UserRole = `
  }
 `
 
-module.exports = { User, UserRole }
+const signInConnection = `
+ type signInConnection{
+   user: User!,
+   jwt: String!
+ }
+`
+
+module.exports = { User, UserRole, signInConnection }

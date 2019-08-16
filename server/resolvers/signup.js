@@ -1,5 +1,6 @@
 
 var admin = require("firebase-admin");
+const { client } = require('../config/pg/pgClient');
 
 const signupResolvers = {
     Mutation: {
@@ -17,9 +18,17 @@ const signupResolvers = {
 
             if (result && result.uid) {
                 const { uid, email, displayName, } = result
+                
                 let currentUser = {
-                    uid, username: displayName, email, userRole: 'ADMIN'
+                    uid, username: displayName, email, userRole
                 }
+
+                const savingDataInPg = await client.query(`
+                    INSERT INTO public."User" 
+                    (uid, username, email, role) 
+                    VALUES('${uid}','${displayName}','${email}','${userRole}')`
+                )
+
                 return currentUser
             }
             else throw new Error(result);

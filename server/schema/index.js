@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-express');
 const { signinSchema } = require('./signin');
 const { signupSchema } = require('./signup');
-const { User, UserRole } = require('../models')
+const { User, UserRole, signInConnection } = require('../models')
 const linkSchema = gql`
 type Query {
 _: Boolean
@@ -14,6 +14,6 @@ _: Boolean
 }
 `;
 
-const schema = [linkSchema, signinSchema, User, UserRole, signupSchema];
+const schema = [linkSchema, signinSchema, User, UserRole, signupSchema, signInConnection];
 
 module.exports = { schema }

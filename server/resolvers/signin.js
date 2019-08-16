@@ -1,6 +1,7 @@
 const admin = require("firebase-admin");
 const fetch = require('node-fetch');
 const { signIn } = require("./../config/firebase-admin/restAPIs/index")
+const { client } = require('../config/pg/pgClient');
 
 const signinResolvers = {
     Mutation: {
@@ -14,8 +15,12 @@ const signinResolvers = {
             const user = await result.json()
 
             if (user && user.idToken) {
-                const { localId } = user
-                return { uid: localId }
+                const { localId, idToken } = user
+                const gettingDataFromPg = await client.query(`
+                    SELECT * FROM public."User" WHERE uid='${localId}'
+                `)
+                const { uid, username, email, role } = gettingDataFromPg.rows[0]
+                return { user: { uid, username, email, role }, jwt: idToken }
             }
             else throw new Error(user);
         }
