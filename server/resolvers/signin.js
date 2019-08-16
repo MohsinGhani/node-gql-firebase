@@ -20,7 +20,7 @@ const signinResolvers = {
                     SELECT * FROM public."User" WHERE uid='${localId}'
                 `)
                 const { uid, username, email, role } = gettingDataFromPg.rows[0]
-                return { user: { uid, username, email, role }, jwt: idToken }
+                return { user: { uid, username, email, role: [role] }, jwt: idToken }
             }
             else throw new Error(user);
         }

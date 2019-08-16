@@ -3,7 +3,7 @@ const User = `
     uid: String!
     username: String!
     email: String!
-    role: UserRole!
+    role: [UserRole]!
  }
 `;
 
