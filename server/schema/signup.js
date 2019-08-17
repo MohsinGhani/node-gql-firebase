@@ -7,7 +7,7 @@ const signupSchema = gql`
        username: String!
        email:String!
        password:String!
-       userRole: UserRole!
+       userRole: [UserRole]!
       ): User!
     }
 `;

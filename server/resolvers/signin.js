@@ -17,10 +17,14 @@ const signinResolvers = {
             if (user && user.idToken) {
                 const { localId, idToken } = user
                 const gettingDataFromPg = await client.query(`
-                    SELECT * FROM public."User" WHERE uid='${localId}'
+                    SELECT * FROM public."User" WHERE uid='${localId}';
+                    SELECT * FROM public."UserRoles" UR
+                        JOIN public."Role" role ON role.role_id = UR.role_id
+                    WHERE user_id='${localId}';
                 `)
-                const { uid, username, email, role } = gettingDataFromPg.rows[0]
-                return { user: { uid, username, email, role: [role] }, jwt: idToken }
+                const { uid, username, email } = gettingDataFromPg[0].rows[0]
+                const roles = gettingDataFromPg[1].rows
+                return { user: { uid, username, email, role: roles.map(role => role.role_name) }, jwt: idToken }
             }
             else throw new Error(user);
         }

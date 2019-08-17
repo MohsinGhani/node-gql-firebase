@@ -17,18 +17,29 @@ const signupResolvers = {
             })
 
             if (result && result.uid) {
-                const { uid, email, displayName, } = result
-                
+                const { uid, email, displayName } = result
+
                 let currentUser = {
                     uid, username: displayName, email, userRole
                 }
 
                 const savingDataInPg = await client.query(`
                     INSERT INTO public."User" 
-                    (uid, username, email, role) 
-                    VALUES('${uid}','${displayName}','${email}','${userRole}')`
+                    (uid, username, email) 
+                    VALUES('${uid}','${displayName}','${email}')`
                 )
 
+                let allPromises = []
+                userRole.map((role) => {
+                    allPromises.push(client.query(`
+                        INSERT INTO public."UserRoles" 
+                        (role_id, user_id) 
+                        VALUES('${role.toLowerCase()}','${uid}')`
+                    ))
+                })
+
+                const savedRoles = await Promise.all(allPromises);
+                
                 return currentUser
             }
             else throw new Error(result);
