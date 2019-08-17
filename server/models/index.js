@@ -11,7 +11,7 @@ const UserRole = `
  enum UserRole{
    ADMIN
    MANAGER
-   SALTES_REP
+   SALES_REP
    CUSTOMER_SERVICE
  }
 `
